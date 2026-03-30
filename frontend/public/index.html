@@ -1,0 +1,232 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<title>EduAI Platform</title>
+<link rel="stylesheet" href="/css/main.css">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600&display=swap">
+</head>
+<body>
+<div class="shell">
+
+  <!-- SIDEBAR -->
+  <aside class="sidebar">
+    <div class="logo-block">
+      <div class="logo-mark">EduAI</div>
+      <div class="logo-sub" id="course-label">Loading…</div>
+    </div>
+    <div class="nav-sec">Teacher</div>
+    <div class="nav-item active" data-view="dashboard">
+      <svg class="ni" viewBox="0 0 16 16" fill="none"><rect x="1.5" y="1.5" width="5.5" height="5.5" rx="1.2" fill="currentColor" opacity=".8"/><rect x="9" y="1.5" width="5.5" height="5.5" rx="1.2" fill="currentColor" opacity=".8"/><rect x="1.5" y="9" width="5.5" height="5.5" rx="1.2" fill="currentColor" opacity=".8"/><rect x="9" y="9" width="5.5" height="5.5" rx="1.2" fill="currentColor" opacity=".8"/></svg>
+      Dashboard
+    </div>
+    <div class="nav-item" data-view="analytics">
+      <svg class="ni" viewBox="0 0 16 16" fill="none"><polyline points="1.5,13 4.5,8 7.5,10.5 10.5,5.5 14.5,7" stroke="currentColor" stroke-width="1.5" fill="none" stroke-linejoin="round" stroke-linecap="round"/></svg>
+      Analytics
+    </div>
+    <div class="nav-item" data-view="misconceptions">
+      <svg class="ni" viewBox="0 0 16 16" fill="none"><circle cx="8" cy="8" r="6" stroke="currentColor" stroke-width="1.4"/><line x1="8" y1="5" x2="8" y2="9" stroke="currentColor" stroke-width="1.5" stroke-linecap="round"/><circle cx="8" cy="11.5" r=".8" fill="currentColor"/></svg>
+      Misconceptions
+    </div>
+    <div class="nav-item" data-view="interventions">
+      <svg class="ni" viewBox="0 0 16 16" fill="none"><path d="M8 1.5L10 6H14.5L11 9.5L12.5 14L8 11.5L3.5 14L5 9.5L1.5 6H6Z" stroke="currentColor" stroke-width="1.2" fill="none" stroke-linejoin="round"/></svg>
+      Interventions
+    </div>
+    <div class="nav-item" data-view="review">
+      <svg class="ni" viewBox="0 0 16 16" fill="none"><rect x="2" y="2" width="12" height="12" rx="2" stroke="currentColor" stroke-width="1.3"/><line x1="5" y1="6" x2="11" y2="6" stroke="currentColor" stroke-width="1.3" stroke-linecap="round"/><line x1="5" y1="9" x2="8.5" y2="9" stroke="currentColor" stroke-width="1.3" stroke-linecap="round"/></svg>
+      AI Review Queue <span class="nav-badge" id="queue-badge"></span>
+    </div>
+    <div class="nav-sep"></div>
+    <div class="nav-sec">Student</div>
+    <div class="nav-item" data-view="student">
+      <svg class="ni" viewBox="0 0 16 16" fill="none"><circle cx="8" cy="6" r="3" stroke="currentColor" stroke-width="1.3"/><path d="M2.5 14.5c0-3 2.5-5 5.5-5s5.5 2 5.5 5" stroke="currentColor" stroke-width="1.3" stroke-linecap="round" fill="none"/></svg>
+      Student View
+    </div>
+    <div class="nav-sep"></div>
+    <div class="nav-sec">System</div>
+    <div class="nav-item" data-view="lms">
+      <svg class="ni" viewBox="0 0 16 16" fill="none"><rect x="1" y="3.5" width="14" height="9" rx="2" stroke="currentColor" stroke-width="1.3"/><line x1="5" y1="3.5" x2="5" y2="12.5" stroke="currentColor" stroke-width="1" opacity=".5"/></svg>
+      LMS Overlay
+    </div>
+  </aside>
+
+  <!-- MAIN -->
+  <div class="main">
+    <header class="topbar">
+      <div class="topbar-title" id="view-title">Class Dashboard</div>
+      <div class="topbar-meta" id="topbar-meta">—</div>
+      <span class="pill g" id="live-pill"><span class="dot g"></span>Live</span>
+      <button class="btn primary" id="btn-briefing">Export Briefing</button>
+    </header>
+
+    <!-- ======= DASHBOARD ======= -->
+    <section id="v-dashboard" class="view active content">
+      <div class="kpi-grid" id="kpi-strip"></div>
+      <div class="g64">
+        <div class="card">
+          <div class="ch"><span class="ct">Topic × Student Performance Heatmap</span><span class="hint-tag">darker = stronger mastery · click for detail</span></div>
+          <div style="overflow-x:auto"><table class="heatmap" id="heatmap"></table></div>
+          <div class="hm-legend">Low <div class="hm-swatches"></div> High</div>
+        </div>
+        <div class="card">
+          <div class="ch"><span class="ct">Student Risk Flags</span><span class="pill r" id="risk-count-pill"></span></div>
+          <table class="tbl"><thead><tr><th>Student</th><th>Risk</th><th>Signal</th><th></th></tr></thead><tbody id="risk-body"></tbody></table>
+          <button class="btn primary" style="width:100%;margin-top:10px" id="btn-go-interventions">Manage interventions ›</button>
+        </div>
+      </div>
+      <div class="g3">
+        <div class="card"><div class="ct">Topic Mastery Breakdown</div><div id="topic-spark"></div></div>
+        <div class="card"><div class="ct">Engagement Trend (7 days)</div><div class="ebar-wrap" id="eng-bars"></div><div class="eng-note" id="eng-note"></div></div>
+        <div class="card"><div class="ct">Submission Health</div><div id="sub-health"></div></div>
+      </div>
+    </section>
+
+    <!-- ======= ANALYTICS ======= -->
+    <section id="v-analytics" class="view content" style="display:none">
+      <div class="kpi-grid" style="grid-template-columns:repeat(4,1fr)" id="a-kpi-strip"></div>
+      <div class="g2">
+        <div class="card">
+          <div class="ct">Weekly Score Trend by Topic</div>
+          <div id="a-bars"></div>
+          <div id="a-insight" class="insight-box"></div>
+        </div>
+        <div class="card">
+          <div class="ct">KPI Engine — Computation Logic</div>
+          <div class="kpi-logic-list" id="kpi-logic"></div>
+        </div>
+      </div>
+      <div class="card">
+        <div class="ct">Behaviour Signal Matrix</div>
+        <table class="tbl" id="bsig-table">
+          <thead><tr><th>Signal</th><th>Data Source</th><th>Computation</th><th>Threshold</th><th>Feeds Into</th></tr></thead>
+          <tbody></tbody>
+        </table>
+      </div>
+    </section>
+
+    <!-- ======= MISCONCEPTIONS ======= -->
+    <section id="v-misconceptions" class="view content" style="display:none">
+      <div class="g2">
+        <div class="card">
+          <div class="ch"><span class="ct">Active Misconception Clusters</span><span class="pill r" id="mis-count-pill"></span></div>
+          <div id="mis-list"></div>
+        </div>
+        <div class="card">
+          <div class="ct">Error Taxonomy</div>
+          <div class="g2" style="gap:8px;margin-bottom:14px" id="error-taxonomy"></div>
+          <div class="ct">Frequency by Error Type</div>
+          <div id="err-bars"></div>
+        </div>
+      </div>
+      <div class="card">
+        <div class="ct">Remediation Actions</div>
+        <table class="tbl" id="rem-table">
+          <thead><tr><th>Misconception</th><th>Type</th><th>Affected</th><th>Severity</th><th>Recommendation</th><th></th></tr></thead>
+          <tbody></tbody>
+        </table>
+      </div>
+    </section>
+
+    <!-- ======= INTERVENTIONS ======= -->
+    <section id="v-interventions" class="view content" style="display:none">
+      <div class="flow" id="interv-flow"></div>
+      <div class="g2">
+        <div class="card">
+          <div class="ct">Students Requiring Intervention</div>
+          <table class="tbl"><thead><tr><th>Student</th><th>Risk</th><th>Root Cause</th><th>Action</th><th></th></tr></thead><tbody id="int-body"></tbody></table>
+        </div>
+        <div class="card">
+          <div class="ct">Intervention Outcome History</div>
+          <div id="int-outcomes"></div>
+        </div>
+      </div>
+    </section>
+
+    <!-- ======= REVIEW QUEUE ======= -->
+    <section id="v-review" class="view content" style="display:none">
+      <div class="kpi-grid" style="grid-template-columns:repeat(4,1fr)" id="q-kpi-strip"></div>
+      <div id="queue-list"></div>
+    </section>
+
+    <!-- ======= STUDENT VIEW ======= -->
+    <section id="v-student" class="view content" style="display:none">
+      <div class="g46">
+        <div style="display:flex;flex-direction:column;gap:12px">
+          <div class="card">
+            <div class="ch"><span style="font-size:13px;font-weight:500">Adaptive Quiz</span><span class="pill b" id="quiz-topic-pill">Loading…</span></div>
+            <div id="quiz-area"><div class="loading-msg">Loading personalised question…</div></div>
+          </div>
+          <div class="card">
+            <div class="ct">AI Study Assistant</div>
+            <div id="chat-history" style="min-height:60px;max-height:200px;overflow-y:auto;margin-bottom:10px"></div>
+            <div class="chat-input-row">
+              <input class="chat-input" id="chat-input" placeholder="Ask a question or request a hint…" />
+              <button class="btn primary" id="chat-send">Send</button>
+            </div>
+          </div>
+        </div>
+        <div style="display:flex;flex-direction:column;gap:12px">
+          <div class="card">
+            <div class="ct">My Topic Progress</div>
+            <div id="stu-topics"></div>
+            <div class="divider" style="margin:10px 0"></div>
+            <div class="sec-head">Recent Assignments</div>
+            <div id="stu-recent"></div>
+          </div>
+          <div class="card">
+            <div class="ct">AI-Recommended Next Steps</div>
+            <div id="stu-nextsteps"></div>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- ======= LMS OVERLAY ======= -->
+    <section id="v-lms" class="view" style="display:none;padding:14px 22px;flex-direction:column;gap:10px">
+      <div style="font-size:11px;color:var(--text3)">Moodle course page with EduAI panel injected as a lightweight sidebar overlay — no disruption to existing workflow.</div>
+      <div class="lms-wrap">
+        <div class="lms-main">
+          <div class="lms-tb"><span class="lms-tb-txt">📚 Year 11 Mathematics › Unit 3: Trigonometry › Week 9 Materials</span></div>
+          <div class="lms-body">
+            <div class="lms-h">Week 9: Sine and Cosine Rules</div>
+            <div class="lms-p">This week we consolidate the sine rule and introduce the cosine rule. Work through the resources below before attempting the quiz.</div>
+            <div class="sec-head" style="margin-bottom:8px">Course Resources</div>
+            <div class="lms-res"><span>📄</span>Sine Rule — Notes and Worked Examples</div>
+            <div class="lms-res"><span>🎬</span>Video: Using the Sine Rule (12 min)</div>
+            <div class="lms-res"><span>📄</span>Cosine Rule — Introduction</div>
+            <div class="lms-res"><span>📝</span>Practice Problem Set 3 <span class="pill b" style="margin-left:auto;font-size:9px">AI-personalised</span></div>
+            <div class="lms-res"><span>🧪</span>Adaptive Quiz 2 <span class="pill g" style="margin-left:auto;font-size:9px">Open</span></div>
+          </div>
+        </div>
+        <div class="sidebar-panel">
+          <div class="sp-head">
+            <svg width="12" height="12" viewBox="0 0 16 16" fill="none"><circle cx="8" cy="8" r="6.5" stroke="white" stroke-width="1.2"/><path d="M5 8.5L7.5 11L11 5.5" stroke="white" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/></svg>
+            <span class="sp-head-txt">EduAI Insights</span>
+            <span class="pill g" style="font-size:9px;padding:1px 5px">Live</span>
+          </div>
+          <div class="sp-body" id="lms-panel-body">
+            <div class="loading-msg">Loading…</div>
+          </div>
+        </div>
+      </div>
+    </section>
+  </div>
+</div>
+
+<!-- STUDENT SELECT MODAL -->
+<div class="modal-overlay" id="student-modal" style="display:none">
+  <div class="modal">
+    <div class="modal-head">Select Student (Demo)</div>
+    <div class="modal-body">
+      <div id="student-picker"></div>
+    </div>
+  </div>
+</div>
+
+<script src="/js/api.js"></script>
+<script src="/js/render.js"></script>
+<script src="/js/app.js"></script>
+</body>
+</html>

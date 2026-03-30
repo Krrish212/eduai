@@ -1,0 +1,28 @@
+# /etc/systemd/system/eduai.service
+# After copying: sudo systemctl enable eduai && sudo systemctl start eduai
+
+[Unit]
+Description=EduAI Platform
+After=network.target mongod.service
+Wants=mongod.service
+
+[Service]
+Type=simple
+User=www-data
+WorkingDirectory=/var/www/eduai
+ExecStart=/usr/bin/node backend/server.js
+Restart=on-failure
+RestartSec=10
+StandardOutput=syslog
+StandardError=syslog
+SyslogIdentifier=eduai
+Environment=NODE_ENV=production
+
+# Load env vars from file
+EnvironmentFile=/var/www/eduai/.env
+
+# Resource limits
+LimitNOFILE=65536
+
+[Install]
+WantedBy=multi-user.target
